@@ -3,276 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Format Permintaan Clear Temper</title>
+    <title>WA Cepat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@4.0.0/dist/tesseract.min.js'></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
         }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            width: 100%;
-            max-width: 500px;
-            position: relative;
-            overflow: hidden;
+        .progress-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #f97316; /* Orange-500 for a pop of color */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
         }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #25D366, #128C7E);
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #333;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 14px;
-            font-weight: 400;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #25D366;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-            font-family: inherit;
-        }
-
-        .whatsapp-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
-            border: none;
-            padding: 18px 30px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            text-decoration: none;
-            margin-top: 20px;
-        }
-
-        .whatsapp-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
-        }
-
-        .whatsapp-btn:active {
-            transform: translateY(0);
-        }
-
-        .whatsapp-icon {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
-
-        .preview {
-            background: #f8f9fa;
-            border: 2px dashed #dee2e6;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            color: #495057;
-            white-space: pre-line;
-        }
-
-        .required {
-            color: #dc3545;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 30px 20px;
-                margin: 10px;
-            }
-            
-            .header h1 {
-                font-size: 20px;
-            }
-        }
-
-        .error-message {
-            color: #dc3545;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .form-group.error input {
-            border-color: #dc3545;
-            background: #fff5f5;
-        }
-
-        .form-group.error .error-message {
-            display: block;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Format Permintaan Clear Temper</h1>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-yellow-100 to-orange-400 p-4 text-gray-800">
+
+    <div id="main-container" class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm text-center border border-gray-200 transition-all duration-500">
+        <!-- Tampilan Awal -->
+        <div id="initial-view">
+            <h1 class="text-3xl md:text-4xl font-bold text-orange-600 mb-2">WA CEPAT</h1>
+            <p class="text-gray-600 mb-6">Silakan pilih gambar yang berisi nomer idpel, nomer G dan nomer HP pelanggan.</p>
+            
+            <label for="image-upload" class="cursor-pointer">
+                <div class="flex flex-col items-center justify-center bg-gray-100 border-2 border-dashed border-gray-300 rounded-xl p-6 hover:bg-gray-200 transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.858-1.715A2 2 0 0110.106 4h3.788a2 2 0 011.664.89l.858 1.715a2 2 0 001.664.89H21a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V9z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="text-sm font-semibold text-gray-600">Pilih Gambar</span>
+                </div>
+                <input type="file" id="image-upload" class="hidden" accept="image/*">
+            </label>
+        </div>
+        
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="hidden text-center flex flex-col items-center">
+            <div class="progress-spinner mb-4"></div>
+            <p id="progress-percentage" class="mt-2 text-sm font-bold text-gray-600"></p>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                <div id="progress-bar" class="bg-orange-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="progress-text" class="mt-2 text-sm text-gray-600">Mohon tunggu, sedang diproses.</p>
         </div>
 
-        <form id="clearTemperForm">
-            <div class="form-group">
-                <label for="nomorMeter">ID Pelanggan/Nomor Meter <span class="required">*</span></label>
-                <input type="text" id="nomorMeter" placeholder="Masukkan No Meter" required>
-                <div class="error-message">Nomor meter harus diisi</div>
+        <!-- Tampilan Hasil -->
+        <div id="result-view" class="hidden text-left mt-4">
+            <div class="bg-white border-2 border-orange-500 rounded-xl p-4 mb-4 flex justify-between items-center shadow-md">
+                <p class="text-sm text-gray-600">Nomor Meter/ID Pelanggan:</p>
+                <p id="meter-result" class="text-sm font-bold text-gray-800"></p>
+            </div>
+            
+            <div class="bg-white border-2 border-orange-500 rounded-xl p-4 mb-4 flex justify-between items-center shadow-md">
+                <p class="text-sm text-gray-600">Nomor Gangguan:</p>
+                <p id="g-result" class="text-sm font-bold text-gray-800"></p>
+            </div>
+            
+            <div class="bg-white border-2 border-orange-500 rounded-xl p-4 mb-6 flex justify-between items-center shadow-md">
+                <p class="text-sm text-gray-600">Nomor HP Pelanggan:</p>
+                <p id="hp-result" class="text-sm font-bold text-gray-800"></p>
             </div>
 
-            <div class="form-group">
-                <label for="nomorGangguan">Nomor Gangguan/PK <span class="required">*</span></label>
-                <input type="text" id="nomorGangguan" placeholder="Masukkan Nomor Gangguan" required>
-                <div class="error-message">Nomor gangguan harus diisi</div>
+            <div class="flex flex-col space-y-3">
+                <button id="req-ct-btn" class="w-full bg-green-500 text-white font-semibold py-3 px-4 rounded-full hover:bg-green-600 transition-colors duration-200 shadow-md">
+                    Req CT
+                </button>
+                <button id="hubungi-btn" class="w-full bg-green-500 text-white font-semibold py-3 px-4 rounded-full hover:bg-green-600 transition-colors duration-200 shadow-md">
+                    Hubungi Pelanggan
+                </button>
             </div>
-
-            <button type="button" class="whatsapp-btn" id="sendWhatsApp">
-                <svg class="whatsapp-icon" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.484 3.685"/>
-                </svg>
-                Kirim ke WhatsApp
-            </button>
-        </form>
+            
+            <div class="mt-8 text-center">
+                <img id="uploaded-image" src="#" alt="Gambar yang diunggah" class="hidden rounded-xl border border-gray-300 w-[90%] mx-auto object-contain shadow-md">
+            </div>
+        </div>
     </div>
 
     <script>
-        const form = document.getElementById('clearTemperForm');
-        const nomorMeter = document.getElementById('nomorMeter');
-        const nomorGangguan = document.getElementById('nomorGangguan');
-        const sendButton = document.getElementById('sendWhatsApp');
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadInput = document.getElementById('image-upload');
+            const initialView = document.getElementById('initial-view');
+            const resultView = document.getElementById('result-view');
+            const meterResult = document.getElementById('meter-result');
+            const gResult = document.getElementById('g-result');
+            const hpResult = document.getElementById('hp-result');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const progressPercentage = document.getElementById('progress-percentage');
+            const progressText = document.getElementById('progress-text');
+            const progressBar = document.getElementById('progress-bar');
+            const uploadedImage = document.getElementById('uploaded-image');
+            const reqCTBtn = document.getElementById('req-ct-btn');
+            const hubungiBtn = document.getElementById('hubungi-btn');
 
-        // Validation function
-        function validateForm() {
-            let isValid = true;
-            
-            // Clear previous errors
-            document.querySelectorAll('.form-group').forEach(group => {
-                group.classList.remove('error');
+            let nomorMeter = "";
+            let nomorG = "";
+            let nomorHp = "";
+
+            uploadInput.addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                // Sembunyikan tampilan awal dan tampilkan spinner loading
+                initialView.classList.add('hidden');
+                resultView.classList.add('hidden');
+                loadingSpinner.classList.remove('hidden');
+                
+                // Tampilkan gambar yang diunggah
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImage.src = e.target.result;
+                    uploadedImage.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+
+                // Lakukan OCR
+                Tesseract.recognize(
+                    file,
+                    'eng+ind',
+                    {
+                        logger: m => {
+                            let statusText = '';
+                            if (m.status === 'initializing' || m.status === 'loading') {
+                                statusText = 'Memuat model bahasa...';
+                            } else if (m.status === 'loading tessdata') {
+                                statusText = 'Memuat data bahasa...';
+                            } else if (m.status === 'recognizing text') {
+                                statusText = 'Menganalisis teks...';
+                            }
+                            
+                            progressText.textContent = statusText;
+                            const progress = (m.progress * 100).toFixed(0);
+                            progressPercentage.textContent = `${progress}%`;
+                            progressBar.style.width = `${progress}%`;
+                        }
+                    }
+                ).then(({ data: { text } }) => {
+                    console.log("Hasil OCR Mentah:", text);
+                    
+                    // Regex untuk mencari pola
+                    const meterRegex = /\b(5220\d{8,})\b/;
+                    const gRegex = /\b(G\s?\d{6,})\b/i;
+                    const hpRegex = /\b(62\d{9,12})\b/;
+
+                    // Cari kecocokan
+                    const meterMatch = text.match(meterRegex);
+                    const gMatch = text.match(gRegex);
+                    const hpMatch = text.match(hpRegex);
+
+                    // Tampilkan hasil
+                    nomorMeter = meterMatch ? meterMatch[1] : "Tidak ditemukan";
+                    nomorG = gMatch ? gMatch[1].replace(/\s/g, '') : "Tidak ditemukan"; // Hapus spasi
+                    nomorHp = hpMatch ? hpMatch[1] : "Tidak ditemukan";
+
+                    meterResult.textContent = nomorMeter;
+                    gResult.textContent = nomorG;
+                    hpResult.textContent = nomorHp;
+
+                    // Sembunyikan spinner dan tampilkan hasil
+                    loadingSpinner.classList.add('hidden');
+                    resultView.classList.remove('hidden');
+
+                    // Perbarui tampilan progres setelah selesai
+                    progressBar.classList.remove('bg-orange-600');
+                    progressBar.classList.add('bg-green-500');
+                    progressPercentage.textContent = '100%';
+                    progressText.textContent = 'Selesai!';
+
+                }).catch(err => {
+                    console.error("Kesalahan OCR:", err);
+                    // Gunakan notifikasi in-app
+                    showNotification("Gagal memproses gambar. Mohon coba lagi.", "error");
+                    loadingSpinner.classList.add('hidden');
+                    initialView.classList.remove('hidden');
+                    uploadedImage.classList.add('hidden');
+                });
             });
 
-            // Validate nomor meter
-            if (!nomorMeter.value.trim()) {
-                nomorMeter.closest('.form-group').classList.add('error');
-                isValid = false;
+            // Fungsi untuk menampilkan notifikasi in-app
+            function showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.className = `p-3 mb-4 rounded-xl text-sm font-medium ${type === 'error' ? 'text-red-700 bg-red-100 border border-red-200' : 'text-green-700 bg-green-100 border border-green-200'}`;
+                const container = document.getElementById('main-container');
+                container.insertBefore(notification, container.firstChild);
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
             }
 
-            // Validate nomor gangguan
-            if (!nomorGangguan.value.trim()) {
-                nomorGangguan.closest('.form-group').classList.add('error');
-                isValid = false;
-            }
+            // Handler tombol "Req CT"
+            reqCTBtn.addEventListener('click', () => {
+                if (nomorMeter === "Tidak ditemukan" || nomorG === "Tidak ditemukan") {
+                    showNotification("Nomor meter atau nomor gangguan tidak ditemukan.", "error");
+                    return;
+                }
+                const message = encodeURIComponent(
+                    `*FORMAT PERMINTAAN CLEAR TEMPER*\n\n` +
+                    `ID Pelanggan/Nomor Meter : ${nomorMeter}\n` +
+                    `Nomor gangguan/PK : ${nomorG}\n` +
+                    `Keterangan: kwh meter periksa.`
+                );
+                const whatsappUrl = `https://wa.me/?text=${message}`;
+                window.open(whatsappUrl, '_blank');
+            });
 
-            return isValid;
-        }
+            // Handler tombol "Hubungi Pelanggan"
+            hubungiBtn.addEventListener('click', () => {
+                if (nomorHp === "Tidak ditemukan") {
+                    showNotification("Nomor HP pelanggan tidak ditemukan.", "error");
+                    return;
+                }
+                
+                const now = new Date();
+                const hour = now.getHours();
+                let salam = "Selamat Siang";
+                if (hour >= 5 && hour < 12) {
+                    salam = "Selamat Pagi";
+                } else if (hour >= 18 || hour < 5) {
+                    salam = "Selamat Malam";
+                }
 
-        // Send to WhatsApp
-        function sendToWhatsApp() {
-            if (!validateForm()) {
-                return;
-            }
-
-            const message = `*FORMAT PERMINTAAN CLEAR TEMPER*
-
-ID Pelanggan/Nomor Meter: ${nomorMeter.value}
-Nomor gangguan/PK: ${nomorGangguan.value}
-Keterangan: kwh meter periksa`;
-
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
-            
-            window.open(whatsappUrl, '_blank');
-            
-            // Refresh page after sending
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
-        }
-
-        // Event listeners
-        sendButton.addEventListener('click', sendToWhatsApp);
-
-        // Remove error state on input
-        nomorMeter.addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('error');
-            }
-        });
-
-        nomorGangguan.addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.closest('.form-group').classList.remove('error');
-            }
+                const message = encodeURIComponent(
+                    `${salam}, Terimakasih telah menggunakan layanan PLN. Ada yang bisa kami bantu?`
+                );
+                const whatsappUrl = `https://wa.me/${nomorHp}?text=${message}`;
+                window.open(whatsappUrl, '_blank');
+            });
         });
     </script>
 </body>
 </html>
+
 
