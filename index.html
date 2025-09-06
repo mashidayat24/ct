@@ -107,46 +107,35 @@
             let nomorG = "";
             let nomorHp = "";
 
-            uploadInput.addEventListener('change', async (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
-
-                // Sembunyikan tampilan awal dan tampilkan spinner loading
-                initialView.classList.add('hidden');
-                resultView.classList.add('hidden');
+            // Fungsi OCR yang telah direfaktor
+            async function performOCR(imagePath) {
+                progressText.textContent = 'Memproses OCR...';
                 loadingSpinner.classList.remove('hidden');
-                
-                // Tampilkan gambar yang diunggah
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    uploadedImage.src = e.target.result;
-                    uploadedImage.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
 
-                // Lakukan OCR
-                Tesseract.recognize(
-                    file,
-                    'eng+ind',
-                    {
-                        logger: m => {
-                            let statusText = '';
-                            if (m.status === 'initializing' || m.status === 'loading') {
-                                statusText = 'Memuat model bahasa...';
-                            } else if (m.status === 'loading tessdata') {
-                                statusText = 'Memuat data bahasa...';
-                            } else if (m.status === 'recognizing text') {
-                                statusText = 'Menganalisis teks...';
+                try {
+                    const { data: { text } } = await Tesseract.recognize(
+                        imagePath,
+                        'eng', 
+                        {
+                            logger: m => {
+                                // Mengupdate teks progres berdasarkan status
+                                if (m.status === 'initializing' || m.status === 'loading') {
+                                    progressText.textContent = 'Memuat model inti...';
+                                } else if (m.status === 'loading tessdata') {
+                                    progressText.textContent = 'Memuat data bahasa...';
+                                } else if (m.status === 'recognizing text') {
+                                    const progress = Math.round(m.progress * 100);
+                                    progressText.textContent = `Menganalisis teks: ${progress}%`;
+                                    progressPercentage.textContent = `${progress}%`;
+                                    progressBar.style.width = `${progress}%`;
+                                }
                             }
-                            
-                            progressText.textContent = statusText;
-                            const progress = (m.progress * 100).toFixed(0);
-                            progressPercentage.textContent = `${progress}%`;
-                            progressBar.style.width = `${progress}%`;
                         }
-                    }
-                ).then(({ data: { text } }) => {
-                    console.log("Hasil OCR Mentah:", text);
+                    );
+
+                    // Menghilangkan spinner dan teks secara instan setelah selesai
+                    progressText.textContent = 'Selesai!';
+                    loadingSpinner.classList.add('hidden');
                     
                     // Regex untuk mencari pola
                     const meterRegex = /\b(5220\d{8,})\b/;
@@ -158,33 +147,55 @@
                     const gMatch = text.match(gRegex);
                     const hpMatch = text.match(hpRegex);
 
-                    // Tampilkan hasil
-                    nomorMeter = meterMatch ? meterMatch[1] : "Tidak ditemukan";
-                    nomorG = gMatch ? gMatch[1].replace(/\s/g, '') : "Tidak ditemukan"; // Hapus spasi
-                    nomorHp = hpMatch ? hpMatch[1] : "Tidak ditemukan";
+                    return {
+                        nomorMeter: meterMatch ? meterMatch[1] : "Tidak ditemukan",
+                        nomorG: gMatch ? gMatch[1].replace(/\s/g, '') : "Tidak ditemukan",
+                        nomorHp: hpMatch ? hpMatch[1] : "Tidak ditemukan"
+                    };
+
+                } catch (err) {
+                    console.error("Kesalahan OCR:", err);
+                    showNotification("Gagal memproses gambar. Mohon coba lagi.", "error");
+                    loadingSpinner.classList.add('hidden');
+                    initialView.classList.remove('hidden');
+                    uploadedImage.classList.add('hidden');
+                    return null;
+                }
+            }
+
+            // Event listener utama
+            uploadInput.addEventListener('change', async (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                initialView.classList.add('hidden');
+                resultView.classList.add('hidden');
+                
+                // Tampilkan gambar yang diunggah
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedImage.src = e.target.result;
+                    uploadedImage.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+
+                const result = await performOCR(file);
+
+                if (result) {
+                    nomorMeter = result.nomorMeter;
+                    nomorG = result.nomorG;
+                    nomorHp = result.nomorHp;
 
                     meterResult.textContent = nomorMeter;
                     gResult.textContent = nomorG;
                     hpResult.textContent = nomorHp;
 
-                    // Sembunyikan spinner dan tampilkan hasil
-                    loadingSpinner.classList.add('hidden');
                     resultView.classList.remove('hidden');
 
-                    // Perbarui tampilan progres setelah selesai
                     progressBar.classList.remove('bg-orange-600');
                     progressBar.classList.add('bg-green-500');
                     progressPercentage.textContent = '100%';
-                    progressText.textContent = 'Selesai!';
-
-                }).catch(err => {
-                    console.error("Kesalahan OCR:", err);
-                    // Gunakan notifikasi in-app
-                    showNotification("Gagal memproses gambar. Mohon coba lagi.", "error");
-                    loadingSpinner.classList.add('hidden');
-                    initialView.classList.remove('hidden');
-                    uploadedImage.classList.add('hidden');
-                });
+                }
             });
 
             // Fungsi untuk menampilkan notifikasi in-app
